@@ -1,0 +1,96 @@
+<% content_for :body_class, 'bg-light' %>
+
+<div class="section instrument-show">
+  <div class="columns">
+    <div class="column is-8">
+        <!-- Title, Price, Edit, Delete if user posted it-->
+        <h1 class="title is-2">
+        <%= number_to_currency(@product.price) %> -
+        <%= @product.title %>
+        
+        <% if !current_user.nil? %>
+          <% if current_user.id == @product.user.id  %>
+          <div class="buttons pt3">
+          <%= link_to 'Edit', edit_product_path(@product), class:'button is-medium is-dark' %>
+          <%= link_to 'Delete', @product, method: :delete, data: { confirm: 'Are you sure?' }, class:'button is-medium is-dark' %>
+          </div>
+          <% end %>
+        <% end %> 
+        </h1>
+
+  <div class="feature-image"><%=  image_tag(@product.image) %></div>
+<!--  Bottom portion more info about product -->
+    <div class="content pa4 mt3 bg-white border-radius-3">
+        <%= @product.description %>
+        <h3 class="subtitle is-4 pt5">Product Specs</h3>
+        <table class="table is-narrow">
+        <% if @product.item_type %>
+          <tr>
+            <td class="has-text-weight-bold">Item Type:</td>
+            <td><%= @product.item_type %></td>
+          </tr>
+        <% end %>
+        
+          <tr>
+            <td class="has-text-weight-bold">Size:</td>
+            <td><%= @product.size %></td>
+          </tr>
+        <% if @product.gender %>
+          <tr>
+            <td class="has-text-weight-bold">Gender:</td>
+            <td><%= @product.gender %></td>
+          </tr>
+        <% end %>
+          <tr>
+            <td class="has-text-weight-bold">Condition:</td>
+            <td><%= @product.condition %></td>
+          </tr>
+        </table>
+        </div>
+    </div>
+
+<!--  Contact Panel -->
+      <div class="column is-3 is-offset-1">
+        <div class="bg-white pa4 border-radius-3">
+          <% if !current_user.nil? %>
+          <p class="has-text-centered title">Contact   <%= @product.user.name %></p>          <hr/>
+          <p class="has-text-centered ">Email  <% if @product.user.email %>  <%= @product.user.email %></p> <% end %>
+          <p class="has-text-centered ">Phone  <% if @product.user.phone %> <%= @product.user.phone %></p> <% end %>
+          <p class="has-text-centered ">Location  <% if @product.user.location %> <%= @product.user.location %></p> <% end %>
+          <p class="has-text-centered subtitle is-4 pt5">Post a comment</p>
+          <hr/>
+          <% else %>
+          <p class="has-text-centered subtitle is-4 pt5">Sign in to see contact info </p>          <hr/>
+          <%end%>
+       
+          <div>
+        </div>
+        <%= render partial: 'comments/form', locals: { comment: @comment } %>
+
+       
+        </div>
+      </div>
+    </div>
+
+<!--  Bottom portion more info about product -->
+    <div class="content pa4 mt3 bg-white border-radius-3">
+
+    <p class="has-text-centered subtitle is-4 pt5">View comments</p>
+            <hr/>
+         <% @comments.each do |comment| %>
+          <div>
+           <div class="has-text-centered"> 
+            <%= comment.body %>
+            by: <%= comment.user_name %>
+            <% if !current_user.nil? %>
+                <% if @product.user.id == current_user.id ||  comment.cid == current_user.id%>
+                - <%= link_to 'Delete', comment_path(comment), method: :delete, data: { confirm: 'Are you sure?' } %> 
+                or <%= link_to 'Edit', edit_comment_path(comment) %> Comment
+                <% end %>
+             <% end %> 
+            </div>
+          </div>
+            
+         <% end %>
+    </div>
+

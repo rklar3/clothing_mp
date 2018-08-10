@@ -1,0 +1,52 @@
+<% content_for :header do %>
+<section class="hero is-dark">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Browse the latest products on Market Place
+      </h1>
+   
+
+
+
+    <div class="field has-addons">
+      <div class="control has-icons-left">
+        <%= form_tag products_path, :method => 'get' do %>
+        <%= text_field_tag :search, params[:search], class: "input is-dark is-medium",type: "text", placeholder:"ex: Jordan 1" %>
+      </div>
+      <div class="control">
+        <%= button_tag(type: "submit", class: "button is-black is-medium") do %>
+        <i class="fa fa-search"></i>
+        <% end %>
+        <% end%>
+      </div>
+    </div>
+
+
+
+
+
+
+  </div>
+</div>
+
+</section>
+<% end %>
+<div class="instrument-index-grid pt4 is-4">
+
+  <% @products.each do |product| %>
+    <div class="card">
+      <div class="card-content">
+        <h3 class="fw7 f4 title"><%= link_to product.title, product %></h3>
+      
+      <%= link_to image_tag(product.image.url(:thumb)), product  %>
+        <p class="f3 fw6 has-text-right pt2 price"><%= number_to_currency(product.price) %></p>
+      </div>
+
+    </div>
+  <% end %>
+
+</div>
+
+
+
